@@ -3,9 +3,13 @@ import Weather from "./Weather";
 
 function App() {
   return (
+    <div className="bg-slate-200 h-screen ">
+       <Weather></Weather>
+
+    </div>
 
   //  <Weather></Weather>
-  <Weather></Weather>
+ 
   )
 }
 

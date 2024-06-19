@@ -16,8 +16,10 @@ function Weather() {
     let [hide,sethide]=useState("I can give you a Weather Report about your city !")
     // /////////////////////////////////////////////////
     ///warnings//
+    let [placeadd1,setplaceadd1]=useState("")//success
+    let [placeadd2,setplaceadd2]=useState("")//failed
    let [img,setimg]=useState("")
-   let [addplace,setaddplace]=useState("")
+   let [addplace,setaddplace]=useState(null)
     var [type,settype]=useState([,
       "New York", "Los Angeles", "Chicago", "Houston", "Phoenix",
     "Philadelphia", "San Antonio", "San Diego", "Dallas", "San Jose",
@@ -122,7 +124,9 @@ function Weather() {
     "Virudhunagar"
 
     ])
-    console.log({type})
+    console.log(type)
+    let [weathersuccess,setweathersuccess]=useState("")
+    let [weatherfail,setweatherfail]=useState("")
  
     let [warntext,setwarntext]=useState("")
     let [empty,setempy]=useState("")
@@ -131,6 +135,8 @@ function Weather() {
     function handleChange(eve){
         setcity(eve.target.value)
         sethide("I can give you a Weather Report about your city !")
+        setweathersuccess("")
+        setweatherfail("")
 
         setweather("")
         setTemperature("")
@@ -145,7 +151,23 @@ function Weather() {
     }
     /////////////////////////////////////// add place
     function handleAddplace(){
-       settype([...type,city])
+
+      if(addplace){
+        if(city){
+          settype([...type,city])
+          setplaceadd1(true)
+          setplaceadd2(false)
+
+        }
+        else{
+          
+          setplaceadd2(true)
+
+      }
+     
+
+      }
+      //  settype([...type,city])
       
      
     }
@@ -168,10 +190,6 @@ function Weather() {
        
         
 }).catch(function(error){
-  // setreports(false)
-  // if(reports===false){
-  //   setfailed("Your Weather Report Failed ")
-  // }
   console.log("Loding Failed ")
 }) 
 
@@ -183,8 +201,15 @@ type.forEach(function(data){
     setcorrect(`${city}`)
     console.log(`entered correct - ${city}`)
     setsuccess("Your Weather Report Success :)")
+    setweathersuccess(" )")
+
     setaddplace(false)
     sethide("")
+    setcity("")
+    setwarntext("")
+    setaddplace("")
+    setplaceadd1(false)
+    setplaceadd2(false)
      cityfound=true
   }
 
@@ -193,9 +218,10 @@ type.forEach(function(data){
 if(cityfound===false){
  
   setsuccess("Your Weather Report Failed :(")
-  setwarntext("please enter correct city name or Add place")
+  setwarntext(`please enter correct city name or Add place : ${city}`)
   console.log(`Not correct - ${city}`)
   setaddplace(true)
+  setweatherfail(" (")
 }
 setimg(true)
 }
@@ -208,7 +234,7 @@ else{
   setempy("Please enter the City Name or State Name")
 }
 
-setcity("")
+// setcity("")
 console.log(`weatherReort-${weather}`)
 
     }
@@ -218,11 +244,11 @@ console.log(`weatherReort-${weather}`)
       <div className="my-6 md:my-0">
         <div className=" p-5 border gap-2  rounded-md  bg-amber-200 md:flex flex-row">
           <div>
-          <h1 className="grid">Weather Report:</h1><h1><p className="text-blue-700 font-bold grid">{correct}</p></h1>
+          <h1 className="grid font-bold">Weather Report :{weathersuccess}{weatherfail}</h1><h1><p className="text-blue-700 font-bold grid">{correct}</p></h1>
        
        <p>{hide}</p>
        <h1 className="text-red-800">{empty}</h1>
-       <input type="text" value={city} onChange={handleChange} className="p-2 mt-2 border rounded-md" placeholder='Enter your city name'></input><br/>
+       <input type="text" value={city} onChange={handleChange} className="p-2 mt-2 w-48 border rounded-md md:p-2" placeholder='Enter your city name'></input><br/>
        <button onClick={handleEnter} className="p-2   border rounded-md bg-indigo-500 mt-3 text-white md:p-2">Get Report</button>
         <div className="mt-2">
            <p className="font-bold"><b> Weather: </b>{weather}</p>
@@ -239,9 +265,15 @@ console.log(`weatherReort-${weather}`)
             </div>}
            <h1 className="text-red-600">{warntext}</h1>
            {
-            addplace?<button onClick={handleAddplace} className="bg-green-400 p-1 border rounded-md">Add place</button>:""
-           }
+            addplace?<button onClick={handleAddplace} className="bg-green-400 p-1 mt-2 border rounded-md">Add place</button>:""
            
+          }
+           {
+           placeadd1?<p className="text-green-800 font-bold">Place Added Successfully</p>:""
+           }
+           {
+            placeadd2?<p className="text-red-800 font-bold">Place Added Failed</p>:""
+           }
         </div>
 
 
