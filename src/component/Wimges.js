@@ -6,6 +6,8 @@ import seven from "../Img/overcast clouds.jpg";
 import four from "../Img/scatteredclouds.jpg";
 import five from "../Img/broken clouds.jpg";
 import six from "../Img/mist.jpg";
+import eight from "../Img/moderate rain.jpg";
+import nine from "../Img/thunderstorm.jpg"
 
 import { useState } from "react";
 function Wimges(props) {
@@ -19,9 +21,11 @@ function Wimges(props) {
     "scattered clouds",
     "broken clouds",
     "mist",
-    "overcast clouds"
+    "overcast clouds",
+    "moderate rain",
+    "thunderstorm"
   ];
-  let imgindex=[one,two,three,four,five,six,seven]
+  let imgindex=[one,two,three,four,five,six,seven,eight,nine]
   // var weatherImg=([one,two,three,four])
   let description = props.description;
   let compareindex=description

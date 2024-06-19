@@ -147,16 +147,20 @@ function Weather() {
         setcorrect("")
         setsuccess("")
         setimg("")
+        setplaceadd1("")
         
     }
     /////////////////////////////////////// add place
     function handleAddplace(){
 
       if(addplace){
+        // var locase=city.toLowerCase()
         if(city){
+          
           settype([...type,city])
           setplaceadd1(true)
           setplaceadd2(false)
+          setwarntext("")
 
         }
         else{
@@ -167,7 +171,7 @@ function Weather() {
      
 
       }
-      //  settype([...type,city])
+   
       
      
     }
@@ -197,11 +201,14 @@ if(city){
   
 var cityfound=false
 type.forEach(function(data){
-  if(data===city){
-    setcorrect(`${city}`)
-    console.log(`entered correct - ${city}`)
+  var changeddata=city.charAt(0).toUpperCase()+city.slice(1).trim()
+// var lowecase=data.toLowerCase()
+  if(data===city.trim()||data===changeddata){
+    setcorrect(`${changeddata}`)
+    console.log(`entered correct - ${changeddata}`)
     setsuccess("Your Weather Report Success :)")
     setweathersuccess(" )")
+    setweatherfail("")
 
     setaddplace(false)
     sethide("")
@@ -222,6 +229,7 @@ if(cityfound===false){
   console.log(`Not correct - ${city}`)
   setaddplace(true)
   setweatherfail(" (")
+  setweathersuccess("")
 }
 setimg(true)
 }
