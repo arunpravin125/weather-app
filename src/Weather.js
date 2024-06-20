@@ -131,12 +131,14 @@ function Weather() {
     let [warntext,setwarntext]=useState("")
     let [empty,setempy]=useState("")
     let [correct,setcorrect]=useState("")
+    let [nodata, setnodata] = useState(false);
 
     function handleChange(eve){
         setcity(eve.target.value)
         sethide("I can give you a Weather Report about your city !")
         setweathersuccess("")
         setweatherfail("")
+        setnodata(false)
 
         setweather("")
         setTemperature("")
@@ -150,17 +152,30 @@ function Weather() {
         setplaceadd1("")
         
     }
+    var condition=""
     /////////////////////////////////////// add place
     function handleAddplace(){
+      var changeddata=city.charAt(0).toUpperCase()+city.slice(1).trim()
+      console.log(`added data :${changeddata}`)
 
       if(addplace){
         // var locase=city.toLowerCase()
-        if(city){
+        if(changeddata){
           
-          settype([...type,city])
+          settype([...type,changeddata])
           setplaceadd1(true)
           setplaceadd2(false)
           setwarntext("")
+
+          if(changeddata){
+            if(weather){
+              setnodata(false)
+            }
+            else{
+              setnodata(true)
+            }
+          }/////////////////////////
+         
 
         }
         else{
@@ -187,8 +202,10 @@ function Weather() {
       
        
         setTemperature(success.data.main.temp)
+        
         setdescription(success.data.weather[0].description)
         setreports(true)
+       
 
         
        
@@ -196,6 +213,7 @@ function Weather() {
 }).catch(function(error){
   console.log("Loding Failed ")
 }) 
+
 
 if(city){
   
@@ -206,17 +224,29 @@ type.forEach(function(data){
   if(data===city.trim()||data===changeddata){
     setcorrect(`${changeddata}`)
     console.log(`entered correct - ${changeddata}`)
+    condition=true
+    setplaceadd1(false)
     setsuccess("Your Weather Report Success :)")
     setweathersuccess(" )")
     setweatherfail("")
-
+    setnodata(false)
     setaddplace(false)
     sethide("")
     setcity("")
     setwarntext("")
     setaddplace("")
+    setweatherfail("")
     setplaceadd1(false)
     setplaceadd2(false)
+    if(correct&&weather){
+      setnodata(false)
+    }
+    if(weather){
+      setnodata(false)
+    }
+    else{
+      setnodata(true)
+    }
      cityfound=true
   }
 
@@ -230,20 +260,62 @@ if(cityfound===false){
   setaddplace(true)
   setweatherfail(" (")
   setweathersuccess("")
+  condition=false
+ 
 }
 setimg(true)
 }
+// if(description){
+//   setnodata()
 
+// }
+// else{
+//   setnodata(true)
+// }
+//////////////////////////////////////////////////////
 if(city){
   setempy("")
+  // setplaceadd1(false)
 
 }
 else{
   setempy("Please enter the City Name or State Name")
+  setweatherfail(" (")
+  setsuccess("")
+  
+  setweather("")
+  setTemperature("")
+  setdescription("")
+
+  setweathersuccess("")
+}
+if(description){
+  setnodata(false)
+  setweathersuccess(" )")
+setplaceadd1(true)
+}
+else if(placeadd1===false){
+
+  setnodata(true)
+
+}
+else{
+   setweathersuccess("")
 }
 
-// setcity("")
+if(condition){
+setnodata(false)
+}
+else if(city){
+  setnodata(false)
+
+}
+else{
+setnodata(true)
+}
+
 console.log(`weatherReort-${weather}`)
+
 
     }
   return (
@@ -256,6 +328,9 @@ console.log(`weatherReort-${weather}`)
        
        <p>{hide}</p>
        <h1 className="text-red-800">{empty}</h1>
+       {
+        nodata?<p className="text-red-800">Place invalid</p>:""
+      }
        <input type="text" value={city} onChange={handleChange} className="p-2 mt-2 w-48 border rounded-md md:p-2" placeholder='Enter your city name'></input><br/>
        <button onClick={handleEnter} className="p-2   border rounded-md bg-indigo-500 mt-3 text-white md:p-2">Get Report</button>
         <div className="mt-2">
@@ -277,7 +352,7 @@ console.log(`weatherReort-${weather}`)
            
           }
            {
-           placeadd1?<p className="text-green-800 font-bold">Place Added Successfully</p>:""
+           placeadd1?<p className="text-green-800 font-bold">Place Added Successfully Press Get Report</p>:""
            }
            {
             placeadd2?<p className="text-red-800 font-bold">Place Added Failed</p>:""
@@ -307,34 +382,3 @@ console.log(`weatherReort-${weather}`)
 
 export default Weather
 
-
-        {/* <div className=" p-5 border rounded-md bg-lime-300">
-        <h1 className="grid">Weather Report:</h1><h1><p className="text-blue-700 grid">{correct}</p></h1>
-       
-        <p>{hide}</p>
-        <h1 className="text-red-800">{empty}</h1>
-        <input type="text" value={city} onChange={handleChange} className="p-2 mt-2 border rounded-md" placeholder='Enter your city name'></input><br/>
-        <button onClick={handleEnter} className="p-3 border rounded-md bg-black mt-3 text-white">Get Report</button>
-         <div className="mt-2">
-            <p className="font-bold"><b> Weather: </b>{weather}</p>
-            <p className="font-bold"><b>Temperature: </b>{Temperature}</p>
-            <p className="font-bold"><b>Description: </b>{description}</p>
-          
-           
-
-            {weather?<h1 className="text-blue-800">{success}</h1>:<h1 className="text-pink-800">{failed}</h1>}
-            <h1 className="text-red-600">{warntext}</h1>
-            
-            
-         </div>
-
-        
-      
-      
-      
-        </div>
-        <div>
-          <Wimges img={img} description={description}></Wimges>
-         
-
-         </div> */}

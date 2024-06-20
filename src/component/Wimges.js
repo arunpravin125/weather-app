@@ -7,12 +7,15 @@ import four from "../Img/scatteredclouds.jpg";
 import five from "../Img/broken clouds.jpg";
 import six from "../Img/mist.jpg";
 import eight from "../Img/moderate rain.jpg";
-import nine from "../Img/thunderstorm.jpg"
+import nine from "../Img/thunderstorm.jpg";
+import ten from "../Img/light rain.jpg"
+import eleven from "../Img/light intensity drizzle.jpg"
+
 
 import { useState } from "react";
 function Wimges(props) {
   let [sky, setsky] = useState("");
-  let [clear, setclear] = useState("");
+  // let [nodata, setnodata] = useState();
   let img=props.img
   let weatherdata = [
     "clouds",
@@ -23,12 +26,20 @@ function Wimges(props) {
     "mist",
     "overcast clouds",
     "moderate rain",
-    "thunderstorm"
+    "thunderstorm","light rain","light intensity drizzle"
   ];
-  let imgindex=[one,two,three,four,five,six,seven,eight,nine]
+  let imgindex=[one,two,three,four,five,six,seven,eight,nine,ten,eleven]
   // var weatherImg=([one,two,three,four])
   let description = props.description;
   let compareindex=description
+
+  // if(compareindex){
+  //   setnodata()
+
+  // }
+  // else{
+  //   setnodata(true)
+  // }
 
   var findIndex=""
 
@@ -55,15 +66,12 @@ function Wimges(props) {
 
 
   return (
-    <img className="h-10% w-50%" src={storeImg} alt={findIndex}></img>
-    // <div>
-    //     <div>
-    //     <img src={storeImg} alt="good thimgs"></img>
-    //     </div>
-    //     {/* <div>
-    //     <img src={one} alt="good thimgs"></img>
-    //     </div> */}
-    // </div>
+    <div>
+     
+<img className="h-10% w-50%" src={storeImg} alt={findIndex}></img>
+    </div>
+    // <img className="h-10% w-50%" src={storeImg} alt={findIndex}></img>
+   
   );
 }
 
