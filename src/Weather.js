@@ -127,11 +127,12 @@ function Weather() {
     console.log(type)
     let [weathersuccess,setweathersuccess]=useState("")
     let [weatherfail,setweatherfail]=useState("")
- 
+ let [getbtn,setgetbtn]=useState()
     let [warntext,setwarntext]=useState("")
     let [empty,setempy]=useState("")
     let [correct,setcorrect]=useState("")
     let [nodata, setnodata] = useState(false);
+    let [report,setreport]=useState(true)
 
     function handleChange(eve){
         setcity(eve.target.value)
@@ -139,7 +140,6 @@ function Weather() {
         setweathersuccess("")
         setweatherfail("")
         setnodata(false)
-
         setweather("")
         setTemperature("")
         setdescription("")
@@ -163,18 +163,13 @@ function Weather() {
         if(changeddata){
           
           settype([...type,changeddata])
+          setgetbtn(true)
           setplaceadd1(true)
           setplaceadd2(false)
           setwarntext("")
+          
 
-          if(changeddata){
-            if(weather){
-              setnodata(false)
-            }
-            else{
-              setnodata(true)
-            }
-          }/////////////////////////
+         
          
 
         }
@@ -199,17 +194,9 @@ function Weather() {
         console.log(success.data.weather[0].main)
         console.log(success.data.weather[0].description)
         setweather(success.data.weather[0].main)
-      
-       
-        setTemperature(success.data.main.temp)
-        
+        setTemperature(success.data.main.temp) 
         setdescription(success.data.weather[0].description)
-        setreports(true)
-       
-
-        
-       
-        
+        setreports(true) 
 }).catch(function(error){
   console.log("Loding Failed ")
 }) 
@@ -233,6 +220,8 @@ type.forEach(function(data){
     setaddplace(false)
     sethide("")
     setcity("")
+    setgetbtn(true)
+    setreport(true)
     setwarntext("")
     setaddplace("")
     setweatherfail("")
@@ -249,11 +238,20 @@ type.forEach(function(data){
     }
      cityfound=true
   }
+  if(description){
+    setnodata("")
+  }
+  else{
+    setnodata(true)
+  }
 
  
 })
 if(cityfound===false){
- 
+  setweather("")
+  setTemperature("")
+  setdescription("")
+  setreport(false)
   setsuccess("Your Weather Report Failed :(")
   setwarntext(`please enter correct city name or Add place : ${city}`)
   console.log(`Not correct - ${city}`)
@@ -262,27 +260,22 @@ if(cityfound===false){
   setweathersuccess("")
   condition=false
  
+ 
 }
 setimg(true)
 }
-// if(description){
-//   setnodata()
 
-// }
-// else{
-//   setnodata(true)
-// }
 //////////////////////////////////////////////////////
 if(city){
   setempy("")
-  // setplaceadd1(false)
+ 
 
 }
 else{
   setempy("Please enter the City Name or State Name")
   setweatherfail(" (")
   setsuccess("")
-  
+  setplaceadd1(false)
   setweather("")
   setTemperature("")
   setdescription("")
@@ -292,7 +285,8 @@ else{
 if(description){
   setnodata(false)
   setweathersuccess(" )")
-setplaceadd1(true)
+setplaceadd1(false)
+
 }
 else if(placeadd1===false){
 
@@ -332,11 +326,23 @@ console.log(`weatherReort-${weather}`)
         nodata?<p className="text-red-800">Place invalid</p>:""
       }
        <input type="text" value={city} onChange={handleChange} className="p-2 mt-2 w-48 border rounded-md md:p-2" placeholder='Enter your city name'></input><br/>
+       {/* {
+        getbtn? <button onClick={handleEnter} className="p-2   border rounded-md bg-indigo-500 mt-3 text-white md:p-2">Get Report</button>:""} */}
        <button onClick={handleEnter} className="p-2   border rounded-md bg-indigo-500 mt-3 text-white md:p-2">Get Report</button>
+       {
+          addplace?<button onClick={handleAddplace} className="bg-green-400 p-2 mt-2 border rounded-md ">Add place</button>:""
+       }
         <div className="mt-2">
-           <p className="font-bold"><b> Weather: </b>{weather}</p>
-           <p className="font-bold"><b>Temperature: </b>{Temperature}</p>
-           <p className="font-bold"><b>Description: </b>{description}</p>
+          {
+            report?<div><p className="font-bold"><b> Weather: </b>{weather}</p>
+            <p className="font-bold"><b>Temperature: </b>{Temperature}</p>
+            <p className="font-bold"><b>Description: </b>{description}</p></div>:""
+            
+
+          }
+          {/* //  <p className="font-bold"><b> Weather: </b>{weather}</p>
+          //  <p className="font-bold"><b>Temperature: </b>{Temperature}</p>
+          //  <p className="font-bold"><b>Description: </b>{description}</p>: */}
          
           
 
@@ -347,12 +353,12 @@ console.log(`weatherReort-${weather}`)
             
             </div>}
            <h1 className="text-red-600">{warntext}</h1>
-           {
+           {/* {
             addplace?<button onClick={handleAddplace} className="bg-green-400 p-1 mt-2 border rounded-md">Add place</button>:""
            
-          }
+          } */}
            {
-           placeadd1?<p className="text-green-800 font-bold">Place Added Successfully Press Get Report</p>:""
+           placeadd1?<p className="text-green-800 font-bold">Place Added Successfully Press " Get Report "</p>:""
            }
            {
             placeadd2?<p className="text-red-800 font-bold">Place Added Failed</p>:""
@@ -361,12 +367,18 @@ console.log(`weatherReort-${weather}`)
 
 
           </div>
-        
-          <div className="h-10% w-50%" >
+        {
+          report? <div className="h-10% w-50%" >
           <Wimges img={img} description={description}></Wimges>
          
 
-         </div>
+         </div>:""
+        }
+        {/* //   <div className="h-10% w-50%" >
+        //   <Wimges img={img} description={description}></Wimges>
+         
+
+        //  </div> */}
       
       
       
