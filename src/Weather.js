@@ -133,6 +133,7 @@ function Weather() {
     let [correct,setcorrect]=useState("")
     let [nodata, setnodata] = useState(false);
     let [report,setreport]=useState(true)
+    let [error,seterror]=useState()
 
     function handleChange(eve){
         setcity(eve.target.value)
@@ -150,6 +151,7 @@ function Weather() {
         setsuccess("")
         setimg("")
         setplaceadd1("")
+        seterror("")
         
     }
     var condition=""
@@ -189,6 +191,12 @@ function Weather() {
     function handleEnter(){
         var weatherData=axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=8157e79500b1cc5b15068531256ea187 `)
         weatherData.then(function(success){
+          if(success){
+            seterror(false)
+          }
+          else{
+            seterror(true)
+          }
           console.log(success.data)
           console.log(success.data.main.temp)
         console.log(success.data.weather[0].main)
@@ -199,6 +207,10 @@ function Weather() {
         setreports(true) 
 }).catch(function(error){
   console.log("Loding Failed ")
+  if(error){
+    seterror(true)
+  }
+  
 }) 
 
 
@@ -220,6 +232,7 @@ type.forEach(function(data){
     setaddplace(false)
     sethide("")
     setcity("")
+     seterror(false)
     setgetbtn(true)
     setreport(true)
     setwarntext("")
@@ -258,6 +271,7 @@ if(cityfound===false){
   setaddplace(true)
   setweatherfail(" (")
   setweathersuccess("")
+  seterror(false)
   condition=false
  
  
@@ -323,7 +337,7 @@ console.log(`weatherReort-${weather}`)
        <p>{hide}</p>
        <h1 className="text-red-800">{empty}</h1>
        {
-        nodata?<p className="text-red-800">Place invalid</p>:""
+        error?<p className="text-red-800">Place invalid</p>:""
       }
        <input type="text" value={city} onChange={handleChange} className="p-2 mt-2 w-48 border rounded-md md:p-2" placeholder='Enter your city name'></input><br/>
        {/* {
